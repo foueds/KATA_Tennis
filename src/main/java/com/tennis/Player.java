@@ -4,14 +4,16 @@ public class Player {
 
     private int id;
     private String name;
-    private int score;
+    private int gameScore;
+    private int scoreSet;
     private boolean isWinner;
     private boolean hasAdvantage;
 
     public Player(int id, String name) {
         this.id = id;
         this.name = name;
-        this.score = 0;
+        this.gameScore = 0;
+        this.scoreSet = 0;
         this.isWinner = false;
         this.hasAdvantage = false;
     }
@@ -32,12 +34,12 @@ public class Player {
         this.name = name;
     }
 
-    public int getScore() {
-        return score;
+    public int getGameScore() {
+        return gameScore;
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void setGameScore(int gameScore) {
+        this.gameScore = gameScore;
     }
 
     public boolean isWinner() {
@@ -54,5 +56,13 @@ public class Player {
 
     public void setHasAdvantage(boolean hasAdvantage) {
         this.hasAdvantage = hasAdvantage;
+    }
+
+    public int getScoreSet() {
+        return scoreSet;
+    }
+
+    public void setScoreSet(int scoreSet) {
+        this.scoreSet = scoreSet;
     }
 }

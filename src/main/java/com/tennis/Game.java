@@ -8,12 +8,14 @@ public class Game {
     private Player secondPlayer;
     private GameStatus gameStatus;
     private boolean deuceRuleIsActivated;
+    private boolean tiebreakIsActivated;
 
     public Game(Player firstPlayer, Player secondPlayer) {
         this.firstPlayer = firstPlayer;
         this.secondPlayer = secondPlayer;
         this.gameStatus = GameStatus.IN_PROGRESS;
         this.deuceRuleIsActivated = false;
+        this.tiebreakIsActivated = false;
     }
 
     public Player getFirstPlayer() {
@@ -48,37 +50,88 @@ public class Game {
         this.deuceRuleIsActivated = deuceRuleIsActivated;
     }
 
-    public void updateScore(Player pointWinner, Player pointLoser) {
+    public boolean isTiebreakIsActivated() {
+        return tiebreakIsActivated;
+    }
 
-        switch (pointWinner.getScore()) {
+    public void setTiebreakIsActivated(boolean tiebreakIsActivated) {
+        this.tiebreakIsActivated = tiebreakIsActivated;
+    }
+
+    public void updateGameScore(Player pointWinner, Player pointLoser) {
+
+        switch (pointWinner.getGameScore()) {
             case 0:
-                pointWinner.setScore(15);
+                pointWinner.setGameScore(15);
                 break;
             case 15:
-                pointWinner.setScore(30);
+                pointWinner.setGameScore(30);
                 break;
             case 30:
-                pointWinner.setScore(40);
-                if (pointLoser.getScore() == 40) {
+                pointWinner.setGameScore(40);
+                if (pointLoser.getGameScore() == 40) {
                     setDeuceRuleIsActivated(true);
                 }
                 break;
             case 40:
-                evaluateFinalPoint(pointWinner, pointLoser);
+                evaluateGameFinalPoint(pointWinner, pointLoser);
                 break;
             default:
                 break;
         }
     }
 
-    public void computePoint(List<Integer> pointWinnerTab) {
+    public void updateScoreSet(Player pointWinner, Player pointLoser) {
+
+        switch (pointWinner.getScoreSet()) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                pointWinner.setScoreSet(pointWinner.getScoreSet() + 1);
+                break;
+            case 5:
+                if (pointLoser.getScoreSet() < 5) {
+                    defineTheWinner(pointWinner);
+                } else if (pointLoser.getScoreSet() == 5) {
+                    pointWinner.setScoreSet(pointWinner.getScoreSet() + 1);
+                    break;
+                } else if (pointLoser.getScoreSet() == 6) {
+                    setTiebreakIsActivated(true);
+                    pointWinner.setScoreSet(pointWinner.getScoreSet() + 1);
+                    break;
+                }
+                break;
+            case 6:
+                if (pointLoser.getScoreSet() > 5) {
+                    pointWinner.setScoreSet(pointWinner.getScoreSet() + 1);
+                    break;
+                }
+                defineTheWinner(pointWinner);
+                break;
+            default:
+                evaluateSetFinalPoint(pointWinner, pointLoser);
+                break;
+        }
+    }
+
+    public void computePoint(List<Integer> pointWinnerTab, Boolean isSetScoreCompute) {
         for (int pointWinner : pointWinnerTab) {
             switch (pointWinner) {
                 case 1: // first player win the point
-                    updateScore(firstPlayer, secondPlayer);
+                    if (isSetScoreCompute) {
+                        updateScoreSet(firstPlayer, secondPlayer);
+                        break;
+                    }
+                    updateGameScore(firstPlayer, secondPlayer);
                     break;
                 case 2: // second player win the point
-                    updateScore(secondPlayer, firstPlayer);
+                    if (isSetScoreCompute) {
+                        updateScoreSet(secondPlayer, firstPlayer);
+                        break;
+                    }
+                    updateGameScore(secondPlayer, firstPlayer);
                     break;
                 default:
                     break;
@@ -86,7 +139,7 @@ public class Game {
         }
     }
 
-    private void evaluateFinalPoint(Player pointWinner, Player pointLoser) {
+    private void evaluateGameFinalPoint(Player pointWinner, Player pointLoser) {
         if (isDeuceRuleIsActivated()) { //score is 40 - 40
             pointWinner.setHasAdvantage(true);
             setDeuceRuleIsActivated(false);
@@ -110,7 +163,14 @@ public class Game {
 
 
     private void resetScore() {
-        this.firstPlayer.setScore(0);
-        this.secondPlayer.setScore(0);
+        this.firstPlayer.setGameScore(0);
+        this.secondPlayer.setGameScore(0);
+    }
+
+    private void evaluateSetFinalPoint(Player pointWinner, Player pointLoser) {
+        pointWinner.setScoreSet(pointWinner.getScoreSet() + 1);
+        if (pointWinner.getScoreSet() == pointLoser.getScoreSet() + 2) {
+            defineTheWinner(pointWinner);
+        }
     }
 }
