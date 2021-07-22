@@ -58,6 +58,12 @@ public class Game {
         this.tiebreakIsActivated = tiebreakIsActivated;
     }
 
+    /**
+     * calculate the score of a game
+     *
+     * @param pointWinner
+     * @param pointLoser
+     */
     public void updateGameScore(Player pointWinner, Player pointLoser) {
 
         switch (pointWinner.getGameScore()) {
@@ -81,6 +87,12 @@ public class Game {
         }
     }
 
+    /**
+     * calculate the score of set
+     *
+     * @param pointWinner
+     * @param pointLoser
+     */
     public void updateScoreSet(Player pointWinner, Player pointLoser) {
 
         switch (pointWinner.getScoreSet()) {
@@ -116,6 +128,12 @@ public class Game {
         }
     }
 
+    /**
+     * compute the number of point for each player
+     *
+     * @param pointWinnerTab
+     * @param isSetScoreCompute
+     */
     public void computePoint(List<Integer> pointWinnerTab, Boolean isSetScoreCompute) {
         for (int pointWinner : pointWinnerTab) {
             switch (pointWinner) {
@@ -139,6 +157,12 @@ public class Game {
         }
     }
 
+    /**
+     * evaluate the final point of the game
+     *
+     * @param pointWinner
+     * @param pointLoser
+     */
     private void evaluateGameFinalPoint(Player pointWinner, Player pointLoser) {
         if (isDeuceRuleIsActivated()) { //score is 40 - 40
             pointWinner.setHasAdvantage(true);
@@ -162,11 +186,20 @@ public class Game {
     }
 
 
+    /**
+     * reset all score
+     */
     private void resetScore() {
         this.firstPlayer.setGameScore(0);
         this.secondPlayer.setGameScore(0);
     }
 
+    /**
+     * evaluate the final point of the set
+     *
+     * @param pointWinner
+     * @param pointLoser
+     */
     private void evaluateSetFinalPoint(Player pointWinner, Player pointLoser) {
         pointWinner.setScoreSet(pointWinner.getScoreSet() + 1);
         if (pointWinner.getScoreSet() == pointLoser.getScoreSet() + 2) {

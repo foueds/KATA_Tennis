@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-class TestTennisSet extends TestTennis {
+class TennisSetTest extends AbstractTennisTest {
 
     @Test
     void should_start_with_score_of_zero_set() {

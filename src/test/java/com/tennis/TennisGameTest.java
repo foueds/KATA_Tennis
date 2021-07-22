@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-class TestTennisGame extends TestTennis {
+class TennisGameTest extends AbstractTennisTest {
 
     @Test
     void should_start_with_score_of_zero() {
